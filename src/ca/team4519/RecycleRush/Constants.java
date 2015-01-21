@@ -1,0 +1,44 @@
+package ca.team4519.RecycleRush;
+
+import ca.team4519.lib.util.ConstantsBase;
+
+public class Constants extends ConstantsBase {
+
+	public static final Constant leftDriveA = new Constant("leftDriveA", 0);
+	public static final Constant leftDriveB = new Constant("leftDriveB", 1);
+	public static final Constant rightDriveA = new Constant("rightDriveA", 2);
+	public static final Constant rightDriveB = new Constant("rightDriveB", 3);
+	public static final Constant strafeA = new Constant("strafeA", 4);
+	public static final Constant lowerClawSpool = new Constant("lowerClawSpool", 5);
+	public static final Constant upperClawSpool = new Constant("upperClawSpool", 6);
+	
+	public static final Constant lowerClawGrab = new Constant("lowerClawGrab", 0);
+	public static final Constant lowerClawRelease = new Constant("lowerClawGrab", 1);
+	public static final Constant upperClawGrab = new Constant("upperClawGrab", 2);
+	public static final Constant upperClawRelease = new Constant("upperClawGrab", 3);
+	public static final Constant chassisHighGear = new Constant("chassisHighGear", 4);
+	public static final Constant chassisLowGear = new Constant("chassisLowGear", 5);
+	
+	public static final Constant leftDriveEncoderCHAN_A = new Constant("leftDriveEncoderCHAN_A", 0);
+	public static final Constant leftDriveEncoderCHAN_B = new Constant("leftDriveEncoderCHAN_B", 1);
+	public static final Constant rightDriveEncoderCHAN_A = new Constant("rightDriveEncoderCHAN_A", 2);
+	public static final Constant rightDriveEncoderCHAN_B = new Constant("rightDriveEncoderCHAN_b", 3);
+	public static final Constant lowerClawPosEncoderCHAN_A = new Constant("lowerClawPosEncoderCHAN_A", 4);
+	public static final Constant lowerClawPosEncoderCHAN_B = new Constant("lowerClawPosEncoerCHAN_B", 5);
+	public static final Constant upperClawPosEncoderCHAN_A = new Constant("upperClawPosEncoderCHAN_A", 6);
+	public static final Constant upperClawPosEncoderCHAN_B = new Constant("upperClawPosEncoderCHAN_B", 7);
+	
+	public static final Constant tankLeftAxis = new Constant("tankLeftAxis", 1);
+	public static final Constant tankRightAxis = new Constant("tankRightAxis", 5);
+	public static final Constant strafePositiveAxis = new Constant("strafePositiveAxis", 3);
+	public static final Constant strafeNegativeAxis = new Constant("strafeNegativeAxis", 2);
+	public static final Constant upperClawMovementAxis = new Constant("upperClawMovementAxis", 5);
+	public static final Constant lowerClawMovementAxis = new Constant("lowerClawMovementAxis", 1);
+	
+	public static final Constant gyro  = new Constant("gyro", 0);
+	
+	public static final Constant wheelSize = new Constant("wheelSize", 6);
+	
+	
+
+}
