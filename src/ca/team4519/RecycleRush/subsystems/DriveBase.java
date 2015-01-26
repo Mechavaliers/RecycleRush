@@ -21,8 +21,8 @@ public class DriveBase extends Subsystem implements Loopable {
 	
 		//THIS NEEDS TO BE TWEAKED AND ADJUSTED AND ALL SORTS OF BUM
 		//^rt
-	  	public final double RIGHT_ENCOCDER_TO_DISTANCE_RATIO =(Constants.wheelSize.getDouble() * Math.PI) / (13.0);
-	  	public final double LEFT_ENCOCDER_TO_DISTANCE_RATIO = (Constants.wheelSize.getDouble() * Math.PI) / (13.0);
+	  	public final double RIGHT_ENCOCDER_TO_DISTANCE_RATIO = (Math.PI*6)/2176 /*(Constants.wheelSize.getDouble() * Math.PI) / (13.0)*/;
+	  	public final double LEFT_ENCOCDER_TO_DISTANCE_RATIO = (Math.PI*6)/2176 /*(Constants.wheelSize.getDouble() * Math.PI) / (13.0)*/;
 	  
 	  	//Speed Controllers
 	  	public Talon leftDriveA = new Talon(Constants.leftDriveA.getInt());
@@ -36,27 +36,38 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	public Encoder leftEncoder = new Encoder(Constants.leftDriveEncoderCHAN_A.getInt(), Constants.leftDriveEncoderCHAN_B.getInt(), false);
 	  	public Encoder rightEncoder = new Encoder(Constants.rightDriveEncoderCHAN_A.getInt(), Constants.rightDriveEncoderCHAN_B.getInt(), true);
 	  
-	    public PID leftPid = new PID(leftEncoder, (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0);
-	 // 	public PID rightPid = new PID((PIDSource)rightEncoder, 0.1f, 0.0f, 0.0f, 0.0f);
+	    public PID leftPid = new PID(leftEncoder, 0.0f, 0.0f, 0.0f, 0.0f);
+	    public PID rightPid = new PID(rightEncoder, 0.0f, 0.0f, 0.0f, 0.0f);
 	  	
 	  	public MechaGyro gyro = new MechaGyro(Constants.gyro.getInt());
 	  	
-	 // 	public PID turningPid = new PID((PIDSource) gyro, 0.0f, 0.0f, 0.0f, 0.0f);
-	  	
-	  	//public PIDDrive autoDrive = new PIDDrive(leftDriveA, rightDriveA, leftPid, rightPid, turningPid);
-	  	
 	  	//Solenoids 
-	  	private Solenoid highGear = new Solenoid(Constants.chassisHighGear.getInt());
-	  	private Solenoid lowGear = new Solenoid(Constants.chassisLowGear.getInt());
+	  	private Solenoid shift = new Solenoid(Constants.chassisShift.getInt());
+
 	  	
 	  	public RioAcceleromiter accelerometer = new RioAcceleromiter();
 	  	
 	    public void setLeftRightStrafePower(double leftPower, double rightPower, double strafePositive, double strafeNegative) {
+	    	
+	    	double strafeInput = strafePositive - strafeNegative;
+	    	double strafeOut = 0;
+	    	
+	    	if(0.09 > leftPower && leftPower > -0.09) leftPower = 0;
+	    	if(0.09 > rightPower && rightPower > -0.09) rightPower = 0;
+	    	if(0.09 > strafeInput && strafeInput > -0.09) strafeInput = 0;
+	    	
+	    	if(strafeInput > strafeOut) {
+	    		strafeOut += Constants.rampingConstant.getDouble();
+	    	}else if(strafeInput < strafeOut) {
+	    		strafeOut -= Constants.rampingConstant.getDouble();
+	    	}
+	    			
+	    	
 	    leftDriveA.set(-leftPower);
 	    leftDriveB.set(-leftPower);
 	    rightDriveA.set(rightPower);
 	    rightDriveB.set(rightPower);
-	    strafeA.set(strafePositive-strafeNegative);
+	   strafeA.set(strafeOut);
 	    
 	    }
 
@@ -82,11 +93,9 @@ public class DriveBase extends Subsystem implements Loopable {
 	    
 	    public void shiftGears(boolean state) {
 	    	if(state){
-	    		lowGear.set(false);
-	    		highGear.set(true);
+	    		shift.set(false);
 	    	}else{
-	    		lowGear.set(true);
-	    		highGear.set(false);
+	    		shift.set(true);
 	    	}
 	    }
 	    
@@ -117,39 +126,39 @@ public class DriveBase extends Subsystem implements Loopable {
 	    return data;
 		}
 	
-	   public Encoder getLeftEncoder() {
+	    public Encoder getLeftEncoder() {
 		    return leftEncoder;
 	   }
 
-	   public double getLeftEncoderDistance() { // in feet
+	   	public double getLeftEncoderDistance() { // in feet
 		    return leftEncoder.get() * LEFT_ENCOCDER_TO_DISTANCE_RATIO;
 	   }
 
-	   public double getLeftEncoderDistanceInMeters() {
+	   	public double getLeftEncoderDistanceInMeters() {
 		    return getLeftEncoderDistance() * 0.3048;
 	   }
 
-	   public Encoder getRightEncoder() {
+	   	public Encoder getRightEncoder() {
 		    return rightEncoder;
 	   }
 
-	   public double getRightEncoderDistance() {
+	   	public double getRightEncoderDistance() {
 		    return rightEncoder.get() * RIGHT_ENCOCDER_TO_DISTANCE_RATIO;
 	   }
 
-	   public double getRightEncoderDistanceInMeters() {
+	   	public double getRightEncoderDistanceInMeters() {
 		    return getRightEncoderDistance() * 0.3048;
 	   }
 
-	   public double getGyroAngle(){
+	   	public double getGyroAngle(){
 		      return gyro.getAngle();
 	   }
 		  
-	   public double getGyroRate(){
+	   	public double getGyroRate(){
 		      return gyro.getRate();
 	   }  
 		  
-	   public double nonContAngle(){
+	   	public double nonContAngle(){
 		   double angle = gyro.getAngle();
 		   if(gyro.getAngle() > 0){
 			   angle = gyro.getAngle()%360;

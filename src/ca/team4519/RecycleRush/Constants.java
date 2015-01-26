@@ -12,12 +12,9 @@ public class Constants extends ConstantsBase {
 	public static final Constant lowerClawSpool = new Constant("lowerClawSpool", 5);
 	public static final Constant upperClawSpool = new Constant("upperClawSpool", 6);
 	
-	public static final Constant lowerClawGrab = new Constant("lowerClawGrab", 0);
-	public static final Constant lowerClawRelease = new Constant("lowerClawGrab", 1);
-	public static final Constant upperClawGrab = new Constant("upperClawGrab", 2);
-	public static final Constant upperClawRelease = new Constant("upperClawGrab", 3);
-	public static final Constant chassisHighGear = new Constant("chassisHighGear", 4);
-	public static final Constant chassisLowGear = new Constant("chassisLowGear", 5);
+	public static final Constant lowerClaw = new Constant("lowerClaw", 0);
+	public static final Constant upperClaw = new Constant("upperClaw", 1);
+	public static final Constant chassisShift = new Constant("chassisShift", 2);
 	
 	public static final Constant leftDriveEncoderCHAN_A = new Constant("leftDriveEncoderCHAN_A", 0);
 	public static final Constant leftDriveEncoderCHAN_B = new Constant("leftDriveEncoderCHAN_B", 1);
@@ -36,6 +33,8 @@ public class Constants extends ConstantsBase {
 	public static final Constant lowerClawMovementAxis = new Constant("lowerClawMovementAxis", 1);
 	
 	public static final Constant gyro  = new Constant("gyro", 0);
+	
+	public static final Constant rampingConstant = new Constant("rampingConstant", 0.2);
 	
 	public static final Constant wheelSize = new Constant("wheelSize", 6);
 	
