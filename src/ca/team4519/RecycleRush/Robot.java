@@ -21,34 +21,30 @@ public class Robot extends MechaIterativeRobot {
 		SmartDashboard.putData("Autonomous Mode Selector", autonSelect);
     	
     	MechaRobot.driveBase.resetAll();
-
     }
 	
 	public void autonomousInit() {
-		 autoMode = (Command) autonSelect.getSelected();
-		 autoMode.start();
-		 MechaRobot.driveBase.shiftGears(true);
+		autoMode = (Command) autonSelect.getSelected();
+		autoMode.start();
+		MechaRobot.driveBase.shiftGears(true);
 		MechaRobot.driveBase.resetEncoders();
 	}
 	
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		
-
 	}
     
 	public void teleopInit() {
-		 MechaRobot.driveBase.shiftGears(true);
+		MechaRobot.driveBase.shiftGears(true);
 		MechaRobot.driveBase.resetEncoders();
 	}
 	
     public void teleopPeriodic() {
-    
-    MechaRobot.elevator.clawToggle1(MechaRobot.elevator.upperGrip(), MechaRobot.elevator.lowerClaw);	
-    MechaRobot.elevator.clawToggle2(MechaRobot.elevator.lowerGrip(), MechaRobot.elevator.upperClaw);
+    	MechaRobot.elevator.clawToggle1(MechaRobot.elevator.upperGrip(), MechaRobot.elevator.lowerClaw);	
+    	MechaRobot.elevator.clawToggle2(MechaRobot.elevator.lowerGrip(), MechaRobot.elevator.upperClaw);
     	
-    MechaRobot.elevator.elevatorMovement(MechaRobot.elevator.upperClawStick.getY(), -MechaRobot.elevator.lowerClawStick.getY());	
-    MechaRobot.driveBase.setLeftRightStrafePower((MechaRobot.driveBase.forwardAxis()), MechaRobot.driveBase.turningAxis(), MechaRobot.driveBase.strafeAxis());
+    	MechaRobot.elevator.elevatorMovement(MechaRobot.elevator.upperClawStick.getY(), -MechaRobot.elevator.lowerClawStick.getY());	
+    	MechaRobot.driveBase.setLeftRightStrafePower((MechaRobot.driveBase.forwardAxis()), MechaRobot.driveBase.turningAxis(), MechaRobot.driveBase.strafeAxis());
     }
    
     public void testPeriodic() {
@@ -56,7 +52,7 @@ public class Robot extends MechaIterativeRobot {
     }
     
     public void allPeriodic() {
-		 MechaRobot.driveBase.shiftGears(true);		
+		MechaRobot.driveBase.shiftGears(true);		
     	MechaRobot.driveBase.update();
     	MechaRobot.elevator.update();
     }
