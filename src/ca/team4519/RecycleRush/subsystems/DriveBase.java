@@ -6,10 +6,12 @@ import ca.team4519.lib.Loopable;
 import ca.team4519.lib.Subsystem;
 import ca.team4519.lib.MechaGyro;
 import ca.team4519.lib.RioAcceleromiter;
-import ca.team4519.lib.pid.PID;
+
 //import ca.team4519.lib.pid.PIDDrive;
 //import ca.team4519.lib.pid.PIDSource;
 import ca.team4519.RecycleRush.Constants;
+import ca.team4519.RecycleRush.MechaRobot;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Encoder;
@@ -18,6 +20,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class DriveBase extends Subsystem implements Loopable {
+	
+		double strafeOut = 0;
+		double turningOut = 0;
+	double drivingOut = 0;
 	
 		//THIS NEEDS TO BE TWEAKED AND ADJUSTED AND ALL SORTS OF BUM
 		//^rt
@@ -36,8 +42,8 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	public Encoder leftEncoder = new Encoder(Constants.leftDriveEncoderCHAN_A.getInt(), Constants.leftDriveEncoderCHAN_B.getInt(), false);
 	  	public Encoder rightEncoder = new Encoder(Constants.rightDriveEncoderCHAN_A.getInt(), Constants.rightDriveEncoderCHAN_B.getInt(), true);
 	  
-	    public PID leftPid = new PID(leftEncoder, 0.0f, 0.0f, 0.0f, 0.0f);
-	    public PID rightPid = new PID(rightEncoder, 0.0f, 0.0f, 0.0f, 0.0f);
+		PIDController leftPid = new PIDController(0.0, 0.0, 0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveA);
+		PIDController rightPid = new PIDController(0.0, 0.0, 0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveA);
 	  	
 	  	public MechaGyro gyro = new MechaGyro(Constants.gyro.getInt());
 	  	
@@ -47,44 +53,90 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	
 	  	public RioAcceleromiter accelerometer = new RioAcceleromiter();
 	  	
-	    public void setLeftRightStrafePower(double leftPower, double rightPower, double strafePositive, double strafeNegative) {
+	    public void setLeftRightStrafePower(double forwardAxis, double turningAxis, double strafeAxis) {
 	    	
-	    	double strafeInput = strafePositive - strafeNegative;
-	    	double strafeOut = 0;
 	    	
-	    	if(0.09 > leftPower && leftPower > -0.09) leftPower = 0;
-	    	if(0.09 > rightPower && rightPower > -0.09) rightPower = 0;
-	    	if(0.09 > strafeInput && strafeInput > -0.09) strafeInput = 0;
 	    	
-	    	if(strafeInput > strafeOut) {
+	    	if(0.09 > forwardAxis && forwardAxis > -0.09) forwardAxis= 0;
+	    	if(0.09 > turningAxis && turningAxis> -0.09) turningAxis = 0;
+	    	if(0.09 > strafeAxis && strafeAxis > -0.09) strafeAxis = 0;
+	    	
+	    	if(strafeAxis > strafeOut) {
 	    		strafeOut += Constants.rampingConstant.getDouble();
-	    	}else if(strafeInput < strafeOut) {
+	    	}else if(strafeAxis < strafeOut) {
 	    		strafeOut -= Constants.rampingConstant.getDouble();
 	    	}
 	    			
+	    	if(turningAxis > turningOut) {
+	    		turningOut += Constants.rampingConstant.getDouble();
+	    	}else if(turningAxis < turningOut) {
+	    		turningOut -= Constants.rampingConstant.getDouble();
+	    	}
 	    	
-	    leftDriveA.set(-leftPower);
-	    leftDriveB.set(-leftPower);
-	    rightDriveA.set(rightPower);
-	    rightDriveB.set(rightPower);
-	   strafeA.set(strafeOut);
-	    
+	    	if(forwardAxis > drivingOut) {
+	    		drivingOut += Constants.rampingConstant.getDouble();
+	    	}else if(forwardAxis < drivingOut) {
+	    		drivingOut -= Constants.rampingConstant.getDouble();
+	    	}
+	    		
+	    	leftDriveA.set(-drivingOut + turningOut);
+	    	leftDriveB.set(-drivingOut + turningOut);
+	    	rightDriveA.set(drivingOut + turningOut);
+	    	rightDriveB.set(drivingOut + turningOut);
+	 
+	    	strafeA.set(-strafeOut);
 	    }
 
-	    public double tankLeftAxis() {
-	    	return gamepad.getRawAxis(Constants.tankLeftAxis.getInt());
+	    public void fancyDrive(double forwardAxis, double rotationAxis, double strafeAxis, double secondStrafe, double gyro, float Kp) {
+	    
+	    	
+	    	if(0.09 > forwardAxis && forwardAxis > -0.09) forwardAxis= 0;
+	    	if(0.09 > rotationAxis && rotationAxis> -0.09) rotationAxis = 0;
+	    	if(0.125 > strafeAxis && strafeAxis > -0.125) strafeAxis = 0;
+	    	if(0.1 > secondStrafe && secondStrafe > -0.1) secondStrafe = 0;
+	    	
+	    	if(strafeAxis > strafeOut || secondStrafe > strafeOut) {
+	    		if((secondStrafe != 0 && strafeAxis == 0) && ( rotationAxis == 0 && forwardAxis == 0)) {
+	    			strafeOut += (Constants.rampingConstant.getDouble() + (gyro* Kp));	
+	    		}else{
+	    		strafeOut += Constants.rampingConstant.getDouble();
+	    		}
+	    	}else if(strafeAxis < strafeOut || secondStrafe > strafeOut) {
+	    		strafeOut -= Constants.rampingConstant.getDouble();
+	    	}
+	    			
+	    	if(rotationAxis > turningOut) {
+	    		turningOut += Constants.rampingConstant.getDouble();
+	    	}else if(rotationAxis < turningOut) {
+	    		turningOut -= Constants.rampingConstant.getDouble();
+	    	}
+	    	
+	    	if(forwardAxis > drivingOut) {
+	    		drivingOut += Constants.rampingConstant.getDouble();
+	    	}else if(forwardAxis < drivingOut) {
+	    		drivingOut -= Constants.rampingConstant.getDouble();
+	    	}
+	    		    		
+	    	leftDriveA.set(-drivingOut + turningOut);
+	    	leftDriveB.set(-drivingOut + turningOut);
+	    	rightDriveA.set(drivingOut + turningOut);
+	    	rightDriveB.set(drivingOut + turningOut);
+	 
+	    	strafeA.set(-strafeOut);
+	    	
 	    }
 	    
-	    public double tankRightAxis() {
-	    	return gamepad.getRawAxis(Constants.tankRightAxis.getInt());
+	    
+	    public double forwardAxis() {
+	    	return gamepad.getRawAxis(Constants.forwardAxis.getInt());
 	    }
 	    
-	    public double strafePositiveAxis() {
-	    	return gamepad.getRawAxis(Constants.strafePositiveAxis.getInt());
+	    public double turningAxis() {
+	    	return gamepad.getRawAxis(Constants.turningAxis.getInt());
 	    }
 	    
-	    public double strafeNegativeAxis() {
-	    	return gamepad.getRawAxis(Constants.strafeNegativeAxis.getInt());
+	    public double strafeAxis() {
+	    	return gamepad.getRawAxis(Constants.strafeAxis.getInt());
 	    }
 	    
 	    public boolean getShift() {
@@ -93,9 +145,9 @@ public class DriveBase extends Subsystem implements Loopable {
 	    
 	    public void shiftGears(boolean state) {
 	    	if(state){
-	    		shift.set(false);
-	    	}else{
 	    		shift.set(true);
+	    	}else{
+	    		shift.set(false);
 	    	}
 	    }
 	    
@@ -193,6 +245,35 @@ public class DriveBase extends Subsystem implements Loopable {
 		      gyro.reset();
 	   	}
 		  
+	   	public void configurePid(double distance, double percentTolerance) {
+	   		
+	   		double ticksL = distance * LEFT_ENCOCDER_TO_DISTANCE_RATIO;
+	   		double ticksR = distance * RIGHT_ENCOCDER_TO_DISTANCE_RATIO;
+	   		
+	   		leftPid.setSetpoint(ticksL);
+	   		leftPid.setPercentTolerance(percentTolerance);
+	   		rightPid.setSetpoint(ticksR);
+	   		rightPid.setPercentTolerance(percentTolerance);
+	   	}
+	   	
+	   	public void pidGo() {
+	   		leftPid.enable();
+	   		rightPid.enable();
+	   	}
+	   	
+	   	public void pidStop() {
+	   		leftPid.disable();
+	   		rightPid.disable();
+	   	}
+	   	
+	   	public boolean pidArrived() {
+	   		if(leftPid.onTarget() && rightPid.onTarget()){
+	   			return true;
+	   		}else{
+	   		return false;
+	   		}
+	   	}
+	   	
 	   	public double getAverageDistance() {
 		    return (getRightEncoderDistance() + getLeftEncoderDistance()) / 2.0;
 	   	}
@@ -202,11 +283,24 @@ public class DriveBase extends Subsystem implements Loopable {
 		    rightEncoder.reset();
 	   	}
 	   	
+	   	public void resetPID() {
+	   		leftPid.reset();
+	   		rightPid.reset();
+	   	}
+	   	
+	   	public void resetAll() {
+	   		resetEncoders();
+	   		resetGyro();
+	   		resetPID();
+	   	}
+	   	
 	   	public void update(){
-		      SmartDashboard.putNumber("Left Drive Distance", getLeftEncoderDistance());
-		      SmartDashboard.putNumber("Right Drive Distance", getRightEncoderDistance());
-		      SmartDashboard.putNumber("Both Encoders, Average Distance", getAverageDistance());
-		      SmartDashboard.putNumber("gyro", smartAngle());
-		      super.update(); 
+	   		
+	   	//	SmartDashboard.putint("Something?", 1);
+		    SmartDashboard.putNumber("Left Drive Distance", getLeftEncoderDistance());
+		    SmartDashboard.putNumber("Right Drive Distance", getRightEncoderDistance());
+		    SmartDashboard.putNumber("Both Encoders, Average Distance", getAverageDistance());
+		    SmartDashboard.putNumber("gyro", smartAngle());
+		    super.update(); 
 	   	}
 }

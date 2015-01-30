@@ -168,7 +168,7 @@ public class MechaIterativeRobot extends RobotBase {
      * be called when the robot is first powered on.  It will be called exactly 1 time.
      */
     public void robotInit() {
-        System.out.println("Default MechaIterativeRobot.robotInit() method... Lets Go!");
+        System.out.println("robotInit() Successful... Lets Go!");
     }
 
     /**
@@ -178,7 +178,7 @@ public class MechaIterativeRobot extends RobotBase {
      * the robot enters disabled mode.
      */
     public void disabledInit() {
-        System.out.println("Default MechaIterativeRobot.disabledInit() method... Lets Go!");
+        System.out.println("disabledInit() Successful... Lets Go!");
     }
 
     /**
@@ -188,7 +188,7 @@ public class MechaIterativeRobot extends RobotBase {
      * the robot enters autonomous mode.
      */
     public void autonomousInit() {
-        System.out.println("Default MechaIterativeRobot.autonomousInit() method... Lets Go!");
+        System.out.println("autonomousInit() Successful... Lets Go!");
     }
 
     /**
@@ -198,7 +198,7 @@ public class MechaIterativeRobot extends RobotBase {
      * the robot enters teleop mode.
      */
     public void teleopInit() {
-        System.out.println("Default MechaIterativeRobot.teleopInit() method... Lets Go!");
+        System.out.println("teleopInit() Successful... Lets Go!");
     }
 
     /**
@@ -208,7 +208,7 @@ public class MechaIterativeRobot extends RobotBase {
      * the robot enters test mode.
      */
     public void testInit() {
-        System.out.println("Default MechaIterativeRobot.testInit() method... Lets Go!");
+        System.out.println("testInit() Successful... Lets Go!");
     }
 
     /* ----------- Overridable periodic code -----------------*/
@@ -222,7 +222,7 @@ public class MechaIterativeRobot extends RobotBase {
      */
     public void disabledPeriodic() {
         if (dpFirstRun) {
-            System.out.println("Default MechaIterativeRobot.disabledPeriodic() method... Lets Go!");
+            System.out.println("disabledPeriodic() Successful... Lets Go!");
             dpFirstRun = false;
         }
         Timer.delay(0.001);
@@ -238,7 +238,7 @@ public class MechaIterativeRobot extends RobotBase {
      */
     public void autonomousPeriodic() {
         if (apFirstRun) {
-            System.out.println("Default MechaIterativeRobot.autonomousPeriodic() method... Lets Go!");
+            System.out.println("autonomousPeriodic() Successful... Lets Go!");
             apFirstRun = false;
         }
         Timer.delay(0.001);
@@ -254,7 +254,7 @@ public class MechaIterativeRobot extends RobotBase {
      */
     public void teleopPeriodic() {
         if (tpFirstRun) {
-            System.out.println("Default MechaIterativeRobot.teleopPeriodic() method... Lets Go!");
+            System.out.println("DteleopPeriodic() Successful... Lets Go!");
             tpFirstRun = false;
         }
         Timer.delay(0.001);
@@ -270,12 +270,12 @@ public class MechaIterativeRobot extends RobotBase {
      */
     public void testPeriodic() {
         if (tmpFirstRun) {
-            System.out.println("Default MechaIterativeRobot.testPeriodic() method... Lets Go!");
+            System.out.println("testPeriodic() Successful... Lets Go!");
             tmpFirstRun = false;
         }
     }
     public void allPeriodic() {
-    	
+    	System.out.println("allPeriodic() Successful... Lets Go!");
     }
 }
 

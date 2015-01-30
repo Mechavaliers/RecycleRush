@@ -6,7 +6,6 @@ import java.util.Hashtable;
 import ca.team4519.lib.Loopable;
 import ca.team4519.lib.Subsystem;
 import ca.team4519.RecycleRush.Constants;
-import ca.team4519.lib.pid.PID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
@@ -15,10 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends Subsystem implements Loopable{
 
-	public boolean open1 = false;
-	public boolean open2 = false;
-	public boolean close1 = true;
-	public boolean close2 = true;
+	public boolean toggleTop = false;
+	public boolean toggleBot = false;
+	//public boolean setTop = false;
+	//public boolean setBot = false;
 	
 	public final double UPPER_CLAW_POS_TO_HEIGHT_RATIO = (Constants.wheelSize.getDouble() * Math.PI) / (12.0 * 256.0);
 	public static double LOWER_CLAW_POS_TO_HEIGHT_RATIO =(Constants.wheelSize.getDouble() * Math.PI) / (12.0 * 256.0);
@@ -78,33 +77,26 @@ public class Elevator extends Subsystem implements Loopable{
 	 upperClawSpool.set(0);
 	 }
 	 
-	 public void clawToggle1(boolean button1, Solenoid claw1) {
+	 public void clawToggle1(boolean button, Solenoid claw) {
 		 
-				 
-		 if (button1 == true && open1 == true) {
-			 claw1.set(true);
-			 open1 = false;
-			 close1 = true;
-		 }else if(button1 == true && close1 == true){
-			 claw1.set(false);
-			 open1 = true;
-			 close1 = false;
-		 }
-		 }
+		if(!button){
+			toggleTop=true;
+		}else if(toggleTop){
+			claw.set(!claw.get());
+			toggleTop=false;
+		}
+	 }
 		 
-	public void clawToggle2(boolean button2, Solenoid claw2) {
-						 
-			 if (button2 == true && open2 == true) {
-				 claw2.set(true);
-				 open2 = false;
-				 close2 = true;
-			 }else if(button2 == true && close2 == true){
-				 claw2.set(false);
-				 open2 = true;
-				 close2 = false;
-			 }
-
+	public void clawToggle2(boolean button, Solenoid claw) {
+		if(!button){
+			toggleBot=true;
+		}else if(toggleBot){
+			claw.set(!claw.get());
+			toggleBot=false;
+		}
 	 }
 	 
-	 
+	public void update() {
+		SmartDashboard.putBoolean("UpperClaw is brabbing?", upperClaw.get());
+	}
 }
