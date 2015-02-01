@@ -1,6 +1,7 @@
 package ca.team4519.RecycleRush.auton;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.PIDController;
 
 import ca.team4519.RecycleRush.MechaRobot;
 
@@ -9,35 +10,47 @@ import ca.team4519.RecycleRush.MechaRobot;
  */
 public class DriveDist extends Command {
 
+	PIDController leftPid = new PIDController(0.00017, 0.0000002, 0.0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveB);
+	PIDController rightPid = new PIDController(-0.00017, -0.0000002, 0.0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveB);
+	
     public DriveDist() {
         super("DriveDist");
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	leftPid.setSetpoint(13460);
+    	rightPid.setSetpoint(13740);
+    	leftPid.setAbsoluteTolerance(100);
+    	rightPid.setAbsoluteTolerance(100);
+    	
     	MechaRobot.driveBase.resetAll();
-    	MechaRobot.driveBase.configurePid(10, 2);
+    	//MechaRobot.driveBase.configurePid(10, 2);
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	MechaRobot.driveBase.pidGo();
+    //	MechaRobot.driveBase.pidGo();
+    	leftPid.enable();
+    	rightPid.enable();
     	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(MechaRobot.driveBase.pidArrived()) {
+    	if(leftPid.onTarget() && rightPid.onTarget()) {
     		return true;
     	}else{
-        return false;
-    	}
+     return false;
+    }
+    
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	MechaRobot.driveBase.pidStop();
+    	leftPid.disable();
+    	rightPid.disable();
     	MechaRobot.driveBase.resetAll();
     	System.out.println("DriveDist Auton program has ended!");
     }

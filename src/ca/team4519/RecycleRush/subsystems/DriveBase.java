@@ -24,9 +24,6 @@ public class DriveBase extends Subsystem implements Loopable {
 		double strafeOut = 0;
 		double turningOut = 0;
 	double drivingOut = 0;
-	
-		//THIS NEEDS TO BE TWEAKED AND ADJUSTED AND ALL SORTS OF BUM
-		//^rt
 	  	public final double RIGHT_ENCOCDER_TO_DISTANCE_RATIO = (Math.PI*6)/2176 /*(Constants.wheelSize.getDouble() * Math.PI) / (13.0)*/;
 	  	public final double LEFT_ENCOCDER_TO_DISTANCE_RATIO = (Math.PI*6)/2176 /*(Constants.wheelSize.getDouble() * Math.PI) / (13.0)*/;
 	  
@@ -39,11 +36,10 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	public Joystick gamepad = new Joystick(0);
 	  
 	  	//Encoders
-	  	public Encoder leftEncoder = new Encoder(Constants.leftDriveEncoderCHAN_A.getInt(), Constants.leftDriveEncoderCHAN_B.getInt(), false);
-	  	public Encoder rightEncoder = new Encoder(Constants.rightDriveEncoderCHAN_A.getInt(), Constants.rightDriveEncoderCHAN_B.getInt(), true);
+	  	public Encoder leftEncoder = new Encoder(Constants.leftDriveEncoderCHAN_A.getInt(), Constants.leftDriveEncoderCHAN_B.getInt(), true);
+	  	public Encoder rightEncoder = new Encoder(Constants.rightDriveEncoderCHAN_A.getInt(), Constants.rightDriveEncoderCHAN_B.getInt(), false);
 	  
-		PIDController leftPid = new PIDController(0.0, 0.0, 0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveA);
-		PIDController rightPid = new PIDController(0.0, 0.0, 0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveA);
+	//	
 	  	
 	  	public MechaGyro gyro = new MechaGyro(Constants.gyro.getInt());
 	  	
@@ -244,7 +240,7 @@ public class DriveBase extends Subsystem implements Loopable {
 	   	public void resetGyro(){
 		      gyro.reset();
 	   	}
-		  
+		/*  
 	   	public void configurePid(double distance, double percentTolerance) {
 	   		
 	   		double ticksL = distance * LEFT_ENCOCDER_TO_DISTANCE_RATIO;
@@ -273,7 +269,7 @@ public class DriveBase extends Subsystem implements Loopable {
 	   		return false;
 	   		}
 	   	}
-	   	
+	   	*/
 	   	public double getAverageDistance() {
 		    return (getRightEncoderDistance() + getLeftEncoderDistance()) / 2.0;
 	   	}
@@ -282,21 +278,21 @@ public class DriveBase extends Subsystem implements Loopable {
 		    leftEncoder.reset();
 		    rightEncoder.reset();
 	   	}
-	   	
+	   	/*
 	   	public void resetPID() {
 	   		leftPid.reset();
 	   		rightPid.reset();
 	   	}
-	   	
+	   	*/
 	   	public void resetAll() {
-	   		resetEncoders();
-	   		resetGyro();
-	   		resetPID();
+	   		gyro.reset();
+	   		leftEncoder.reset();
+		    rightEncoder.reset();
+	   		//leftPid.reset();
+	   		//rightPid.reset();
 	   	}
 	   	
 	   	public void update(){
-	   		
-	   	//	SmartDashboard.putint("Something?", 1);
 		    SmartDashboard.putNumber("Left Drive Distance", getLeftEncoderDistance());
 		    SmartDashboard.putNumber("Right Drive Distance", getRightEncoderDistance());
 		    SmartDashboard.putNumber("Both Encoders, Average Distance", getAverageDistance());
