@@ -463,7 +463,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
      * @param percent error which is tolerable
      * @deprecated Use {@link #setPercentTolerance(double)} or {@link #setAbsoluteTolerance(double)} instead.
      */
-    @Deprecated
+  @Deprecated
   public synchronized void setTolerance(double percent) {
         m_tolerance = new PercentageTolerance(percent);
     }

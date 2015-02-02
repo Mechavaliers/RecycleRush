@@ -1,7 +1,8 @@
 package ca.team4519.RecycleRush.auton;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.PIDController;
+import ca.team4519.lib.MechaPIDController;
+import ca.team4519.lib.pid.PIDDrive;
 
 import ca.team4519.RecycleRush.MechaRobot;
 
@@ -10,19 +11,19 @@ import ca.team4519.RecycleRush.MechaRobot;
  */
 public class DriveDist extends Command {
 
-	PIDController leftPid = new PIDController(0.00017, 0.0000002, 0.0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveB);
-	PIDController rightPid = new PIDController(-0.00017, -0.0000002, 0.0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveB);
+	//MechaPIDController leftPid = new MechaPIDController(0.00017, 0.0000002, 0.0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveA, MechaRobot.driveBase.leftDriveB);
+	//MechaPIDController rightPid = new MechaPIDController(-0.00017, -0.0000002, 0.0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.rightDriveB);
 	
+	PIDDrive chassis = new PIDDrive(
+			new MechaPIDController(0.00017, 0.0000002, 0.0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveA, MechaRobot.driveBase.leftDriveB), 13460, 
+			new MechaPIDController(-0.00017, -0.0000002, 0.0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.rightDriveB), 13740, 
+			new MechaPIDController(0.0, 0.0, 0.0, MechaRobot.driveBase.gyro, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.leftDriveA), 10);
     public DriveDist() {
         super("DriveDist");
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	leftPid.setSetpoint(13460);
-    	rightPid.setSetpoint(13740);
-    	leftPid.setAbsoluteTolerance(100);
-    	rightPid.setAbsoluteTolerance(100);
     	
     	MechaRobot.driveBase.resetAll();
     	//MechaRobot.driveBase.configurePid(10, 2);

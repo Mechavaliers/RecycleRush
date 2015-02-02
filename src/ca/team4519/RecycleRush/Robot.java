@@ -1,11 +1,9 @@
 package ca.team4519.RecycleRush;
 
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.*;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import ca.team4519.lib.MechaIterativeRobot;
-import ca.team4519.RecycleRush.auton.DriveDist;
+import ca.team4519.RecycleRush.auton.*;
 
 public class Robot extends MechaIterativeRobot {
     	
@@ -15,7 +13,8 @@ public class Robot extends MechaIterativeRobot {
 	
 	public void robotInit() {
 		
-		autonSelect.addObject("driveDistance", new DriveDist());
+		autonSelect.addDefault("driveDistance", new DriveDist());
+		autonSelect.addObject("swagaroooo", new OneToteOneBin());
 		SmartDashboard.putData("Autonomous Mode Selector", autonSelect);
     	
     	
