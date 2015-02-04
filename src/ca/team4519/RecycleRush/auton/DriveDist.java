@@ -11,16 +11,11 @@ import ca.team4519.RecycleRush.MechaRobot;
  */
 public class DriveDist extends Command {
 
-	//MechaPIDController leftPid = new MechaPIDController(0.00017, 0.0000002, 0.0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveA, MechaRobot.driveBase.leftDriveB);
-	//MechaPIDController rightPid = new MechaPIDController(-0.00017, -0.0000002, 0.0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.rightDriveB);
-	
-
-
-
 	PIDDrive chassis = new PIDDrive(
 			new MechaPID(0.00017, 0.0000002, 0.0, MechaRobot.driveBase.leftEncoder, MechaRobot.driveBase.leftDriveA, MechaRobot.driveBase.leftDriveB), 13460, 
 			new MechaPID(-0.00017, -0.0000002, 0.0, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.rightDriveB), 13740, 
 			new MechaPID(0.0, 0.0, 0.0, MechaRobot.driveBase.gyro, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.leftDriveA), 0);
+	
     public DriveDist() {
         super("DriveDist");
     }
@@ -29,7 +24,7 @@ public class DriveDist extends Command {
     protected void initialize() {
     	
     	MechaRobot.driveBase.resetAll();
-    	//MechaRobot.driveBase.configurePid(10, 2);
+
     	
     }
 

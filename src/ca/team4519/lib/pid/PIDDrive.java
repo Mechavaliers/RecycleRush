@@ -25,6 +25,12 @@ public class PIDDrive {
 		if(turnFirst(true)){
 			gyroPid.enable();
 			
+			if(gyroPid.onTarget()){
+				gyroPid.disable();
+				leftPid.enable();
+				rightPid.enable();	
+			}
+			
 		}else{
 		leftPid.enable();
 		rightPid.enable();
@@ -38,7 +44,12 @@ public class PIDDrive {
 		}
 		}
 	}
-	
+
+	public void PIDKill() {
+		leftPid.reset();
+		rightPid.reset();
+		gyroPid.reset();
+	}
 	
 	public void setTolerance(double tuleranceTicks, double tuleranceAngle) {
 		leftPid.setAbsoluteTolerance(tuleranceTicks);
