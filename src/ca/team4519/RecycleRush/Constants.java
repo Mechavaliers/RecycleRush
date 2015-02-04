@@ -33,7 +33,7 @@ public class Constants extends ConstantsBase {
 	
 	public static final Constant gyro  = new Constant("gyro", 0);
 	
-	public static final Constant rampingConstant = new Constant("rampingConstant", 0.125);
+	public static final Constant rampingConstant = new Constant("rampingConstant", 0.0125);
 	
 	public static final Constant wheelSize = new Constant("wheelSize", 6);
 	

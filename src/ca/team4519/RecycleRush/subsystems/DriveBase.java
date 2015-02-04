@@ -49,12 +49,12 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	
 	  	public RioAcceleromiter accelerometer = new RioAcceleromiter();
 	  	
-	    public void setLeftRightStrafePower(double forwardAxis, double turningAxis, double strafeAxis) {
+	    public void setLeftRightStrafePower(double tankLeft, double tankRight, double strafePositive, double strafeNegative) {
 	    	
+	    	double strafeAxis = strafePositive - strafeNegative;
 	    	
-	    	
-	    	if(0.09 > forwardAxis && forwardAxis > -0.09) forwardAxis= 0;
-	    	if(0.09 > turningAxis && turningAxis> -0.09) turningAxis = 0;
+	    	if(0.09 > tankLeft && tankLeft > -0.09) tankLeft= 0;
+	    	if(0.09 > tankRight && tankRight> -0.09) tankRight = 0;
 	    	if(0.09 > strafeAxis && strafeAxis > -0.09) strafeAxis = 0;
 	    	
 	    	if(strafeAxis > strafeOut) {
@@ -63,65 +63,25 @@ public class DriveBase extends Subsystem implements Loopable {
 	    		strafeOut -= Constants.rampingConstant.getDouble();
 	    	}
 	    			
-	    	if(turningAxis > turningOut) {
+	    	if(tankLeft > turningOut) {
 	    		turningOut += Constants.rampingConstant.getDouble();
-	    	}else if(turningAxis < turningOut) {
+	    	}else if(tankLeft < turningOut) {
 	    		turningOut -= Constants.rampingConstant.getDouble();
 	    	}
 	    	
-	    	if(forwardAxis > drivingOut) {
+	    	if(tankRight > drivingOut) {
 	    		drivingOut += Constants.rampingConstant.getDouble();
-	    	}else if(forwardAxis < drivingOut) {
+	    	}else if(tankRight < drivingOut) {
 	    		drivingOut -= Constants.rampingConstant.getDouble();
 	    	}
 	    		
-	    	leftDriveA.set(-drivingOut + turningOut);
-	    	leftDriveB.set(-drivingOut + turningOut);
-	    	rightDriveA.set(drivingOut + turningOut);
-	    	rightDriveB.set(drivingOut + turningOut);
+	    	leftDriveA.set(-turningOut);
+	    	leftDriveB.set(-turningOut);
+	    	rightDriveA.set(drivingOut);
+	    	rightDriveB.set(drivingOut);
 	 
 	    	strafeA.set(-strafeOut);
-	    }
-
-	    public void fancyDrive(double forwardAxis, double rotationAxis, double strafeAxis, double secondStrafe, double gyro, float Kp) {
-	    
-	    	
-	    	if(0.09 > forwardAxis && forwardAxis > -0.09) forwardAxis= 0;
-	    	if(0.09 > rotationAxis && rotationAxis> -0.09) rotationAxis = 0;
-	    	if(0.125 > strafeAxis && strafeAxis > -0.125) strafeAxis = 0;
-	    	if(0.1 > secondStrafe && secondStrafe > -0.1) secondStrafe = 0;
-	    	
-	    	if(strafeAxis > strafeOut || secondStrafe > strafeOut) {
-	    		if((secondStrafe != 0 && strafeAxis == 0) && ( rotationAxis == 0 && forwardAxis == 0)) {
-	    			strafeOut += (Constants.rampingConstant.getDouble() + (gyro* Kp));	
-	    		}else{
-	    		strafeOut += Constants.rampingConstant.getDouble();
-	    		}
-	    	}else if(strafeAxis < strafeOut || secondStrafe > strafeOut) {
-	    		strafeOut -= Constants.rampingConstant.getDouble();
-	    	}
-	    			
-	    	if(rotationAxis > turningOut) {
-	    		turningOut += Constants.rampingConstant.getDouble();
-	    	}else if(rotationAxis < turningOut) {
-	    		turningOut -= Constants.rampingConstant.getDouble();
-	    	}
-	    	
-	    	if(forwardAxis > drivingOut) {
-	    		drivingOut += Constants.rampingConstant.getDouble();
-	    	}else if(forwardAxis < drivingOut) {
-	    		drivingOut -= Constants.rampingConstant.getDouble();
-	    	}
-	    		    		
-	    	leftDriveA.set(-drivingOut + turningOut);
-	    	leftDriveB.set(-drivingOut + turningOut);
-	    	rightDriveA.set(drivingOut + turningOut);
-	    	rightDriveB.set(drivingOut + turningOut);
-	 
-	    	strafeA.set(-strafeOut);
-	    	
-	    }
-	    
+	    }	    
 	    
 	    public double forwardAxis() {
 	    	return gamepad.getRawAxis(Constants.forwardAxis.getInt());
