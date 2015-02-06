@@ -49,7 +49,9 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	
 	  	public RioAcceleromiter accelerometer = new RioAcceleromiter();
 	  	
-	    public void setLeftRightStrafePower(double tankLeft, double tankRight, double strafePositive, double strafeNegative) {
+	    public void setLeftRightStrafePower(double tankLeft, double tankRight, double strafePositive, double strafeNegative, boolean handBrake) {
+	    	
+	    	int multiplier = 1;
 	    	
 	    	double strafeAxis = strafePositive - strafeNegative;
 	    	
@@ -74,13 +76,20 @@ public class DriveBase extends Subsystem implements Loopable {
 	    	}else if(tankRight < drivingOut) {
 	    		drivingOut -= Constants.rampingConstant.getDouble();
 	    	}
-	    		
-	    	leftDriveA.set(-turningOut);
-	    	leftDriveB.set(-turningOut);
-	    	rightDriveA.set(drivingOut);
-	    	rightDriveB.set(drivingOut);
+	    	
+	    	if(handBrake){
+	    		 multiplier = 0;
+	    		}else{
+	    			multiplier = 1;
+	    		}
+	    	
+	    	leftDriveA.set(-turningOut * multiplier);
+	    	leftDriveB.set(-turningOut * multiplier);
+	    	rightDriveA.set(drivingOut * multiplier);
+	    	rightDriveB.set(drivingOut * multiplier);
 	 
 	    	strafeA.set(-strafeOut);
+	    	
 	    }	    
 	    
 	    public double forwardAxis() {
@@ -139,7 +148,7 @@ public class DriveBase extends Subsystem implements Loopable {
 	   }
 
 	   	public double getLeftEncoderDistance() { // in feet
-		    return leftEncoder.get() * LEFT_ENCOCDER_TO_DISTANCE_RATIO;
+		    return leftEncoder.get() * 1/*LEFT_ENCOCDER_TO_DISTANCE_RATIO*/;
 	   }
 
 	   	public double getLeftEncoderDistanceInMeters() {
@@ -151,7 +160,7 @@ public class DriveBase extends Subsystem implements Loopable {
 	   }
 
 	   	public double getRightEncoderDistance() {
-		    return rightEncoder.get() * RIGHT_ENCOCDER_TO_DISTANCE_RATIO;
+		    return rightEncoder.get() * 1 /*RIGHT_ENCOCDER_TO_DISTANCE_RATIO*/;
 	   }
 
 	   	public double getRightEncoderDistanceInMeters() {

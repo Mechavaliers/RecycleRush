@@ -26,16 +26,17 @@ public class Constants extends ConstantsBase {
 	public static final Constant upperClawPosEncoderCHAN_B = new Constant("upperClawPosEncoderCHAN_B", 7);
 	
 	public static final Constant forwardAxis = new Constant("tankLeftAxis", 1);
-	public static final Constant turningAxis = new Constant("tankRightAxis", 4);
+	public static final Constant turningAxis = new Constant("tankRightAxis", 5);
 	public static final Constant strafeAxis = new Constant("strafeAxis", 0);
 	public static final Constant upperClawMovementAxis = new Constant("upperClawMovementAxis", 5);
 	public static final Constant lowerClawMovementAxis = new Constant("lowerClawMovementAxis", 1);
 	
 	public static final Constant gyro  = new Constant("gyro", 0);
 	
-	public static final Constant rampingConstant = new Constant("rampingConstant", 0.0125);
+	public static final Constant rampingConstant = new Constant("rampingConstant", 0.05);
 	
 	public static final Constant wheelSize = new Constant("wheelSize", 6);
+	public static final Constant wheelBase = new Constant("wheelBase", 25);
 	
 	
 

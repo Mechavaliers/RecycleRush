@@ -43,7 +43,7 @@ public class Robot extends MechaIterativeRobot {
     	MechaRobot.elevator.clawToggle2(MechaRobot.elevator.lowerGrip(), MechaRobot.elevator.upperClaw);
     	
     	MechaRobot.elevator.elevatorMovement(MechaRobot.elevator.upperClawStick.getY(), -MechaRobot.elevator.lowerClawStick.getY());	
-    	MechaRobot.driveBase.setLeftRightStrafePower(MechaRobot.driveBase.forwardAxis(), MechaRobot.driveBase.turningAxis(), MechaRobot.driveBase.strafeAxis(), MechaRobot.driveBase.gamepad.getRawAxis(2) - MechaRobot.driveBase.gamepad.getRawAxis(3));
+    	MechaRobot.driveBase.setLeftRightStrafePower(MechaRobot.driveBase.forwardAxis(), MechaRobot.driveBase.turningAxis(),MechaRobot.driveBase.gamepad.getRawAxis(3), MechaRobot.driveBase.gamepad.getRawAxis(2), MechaRobot.driveBase.gamepad.getRawButton(6));
     }
    
     public void testPeriodic() {

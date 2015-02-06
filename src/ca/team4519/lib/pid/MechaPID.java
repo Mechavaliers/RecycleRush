@@ -45,7 +45,8 @@ public class MechaPID implements LiveWindowSendable, MechaController {
     java.util.Timer m_controlLoop;
     private boolean m_freed = false;
     private boolean m_usingPercentTolerance;
-    private double rampingConstant = 0.0125;
+    private double rampingConstant = 0.05;
+    double output=0;
     
     /**
      * Tolerance is the type of tolerance used to specify if the PID controller is on target.
@@ -202,6 +203,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
       synchronized (this) {
         m_freed = true;
         m_pidOutput = null;
+        m_pidOutput = null;
         m_pidInput = null;
         m_controlLoop = null;
       }
@@ -221,7 +223,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
             if (m_pidInput == null) {
                 return;
             }
-            if (m_pidOutput == null) {
+            if (m_pidOutput == null || m_pidOutput2 == null) {
                 return;
             }
             enabled = m_enabled; // take snapshot of these values...
@@ -236,7 +238,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
             synchronized (this){
               input = pidInput.pidGet();
             }
-            double output;
+            
 			synchronized (this) {
                 m_error = m_setpoint - input;
                 if (m_continuous) {
@@ -275,12 +277,14 @@ public class MechaPID implements LiveWindowSendable, MechaController {
                 pidOutput = m_pidOutput;
                 pidOutput2 = m_pidOutput2;
                 result = m_result;
-                output = result;
                 
-                if(result > output) {
+                
+                if(result > output && result > 0) {
     	    		output += rampingConstant;
-    	    	}else if(result < output) {
+    	    	}else if(result < output && result < 0) {
     	    		output -= rampingConstant;
+    	    	}else{
+    	    		output= result;
     	    	}
             }
 
@@ -308,14 +312,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
         }
     }
 
-    /**
-    * Set the PID Controller gain parameters.
-    * Set the proportional, integral, and differential coefficients.
-    * @param p Proportional coefficient
-    * @param i Integral coefficient
-    * @param d Differential coefficient
-    * @param f Feed forward coefficient
-    */
+
     public synchronized void setPID(double p, double i, double d, double f) {
         m_P = p;
         m_I = i;
@@ -330,64 +327,32 @@ public class MechaPID implements LiveWindowSendable, MechaController {
         }
     }
 
-    /**
-     * Get the Proportional coefficient
-     * @return proportional coefficient
-     */
+
     public synchronized double getP() {
         return m_P;
     }
 
-    /**
-     * Get the Integral coefficient
-     * @return integral coefficient
-     */
     public synchronized double getI() {
         return m_I;
     }
 
-    /**
-     * Get the Differential coefficient
-     * @return differential coefficient
-     */
     public synchronized double getD() {
         return m_D;
     }
 
-    /**
-     * Get the Feed forward coefficient
-     * @return feed forward coefficient
-     */
     public synchronized double getF() {
         return m_F;
     }
 
-    /**
-     * Return the current PID result
-     * This is always centered on zero and constrained the the max and min outs
-     * @return the latest calculated output
-     */
     public synchronized double get() {
         return m_result;
     }
 
-    /**
-     *  Set the PID controller to consider the input to be continuous,
-     *  Rather then using the max and min in as constraints, it considers them to
-     *  be the same point and automatically calculates the shortest route to
-     *  the setpoint.
-     * @param continuous Set to true turns on continuous, false turns off continuous
-     */
     public synchronized void setContinuous(boolean continuous) {
         m_continuous = continuous;
     }
 
-    /**
-     *  Set the PID controller to consider the input to be continuous,
-     *  Rather then using the max and min in as constraints, it considers them to
-     *  be the same point and automatically calculates the shortest route to
-     *  the setpoint.
-     */
+
     public synchronized void setContinuous() {
         this.setContinuous(true);
     }
@@ -407,12 +372,6 @@ public class MechaPID implements LiveWindowSendable, MechaController {
         setSetpoint(m_setpoint);
     }
 
-    /**
-     * Sets the minimum and maximum values to write.
-     *
-     * @param minimumOutput the minimum percentage to write to the output
-     * @param maximumOutput the maximum percentage to write to the output
-     */
     public synchronized void setOutputRange(double minimumOutput, double maximumOutput) {
         if (minimumOutput > maximumOutput) {
             throw new BoundaryException("Lower bound is greater than upper bound");
@@ -526,7 +485,9 @@ public class MechaPID implements LiveWindowSendable, MechaController {
      */
     @Override
     public synchronized void disable() {
+    	m_pidOutput2.pidWrite(0);
         m_pidOutput.pidWrite(0);
+        output=0;
         m_enabled = false;
 
         if (table != null) {
