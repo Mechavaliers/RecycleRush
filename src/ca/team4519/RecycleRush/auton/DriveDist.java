@@ -49,10 +49,10 @@ public class DriveDist extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if(left.onTarget() && right.onTarget()){
-    		SmartDashboard.putBoolean("are we here", true);
+    		//SmartDashboard.putBoolean("are we here", true);
     		return true;
     	}else {
-    		SmartDashboard.putBoolean("are we here", false);
+    		//SmartDashboard.putBoolean("are we here", false);
     		return false;
     	}
     	
@@ -67,7 +67,7 @@ public class DriveDist extends Command {
     	left.disable();
     	right.disable();
     	MechaRobot.driveBase.resetAll();
-    	SmartDashboard.putBoolean("are we here", isFinished());
+    	SmartDashboard.putBoolean("are we here", true);
     	System.out.println("DriveDist Auton program has ended!");
     }
 
