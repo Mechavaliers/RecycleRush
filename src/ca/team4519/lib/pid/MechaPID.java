@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
 import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.tables.ITableListener;
 import edu.wpi.first.wpilibj.util.BoundaryException;
+import ca.team4519.RecycleRush.MechaRobot;
 
 /**
  * Class implements a PID Control Loop.
@@ -45,7 +46,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
     java.util.Timer m_controlLoop;
     private boolean m_freed = false;
     private boolean m_usingPercentTolerance;
-    private double rampingConstant = 0.05;
+    private double rampingConstant = 0.025;
     double output=0;
     
     /**
@@ -276,7 +277,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
                 }
                 pidOutput = m_pidOutput;
                 pidOutput2 = m_pidOutput2;
-                result = m_result;
+                result = m_result - (MechaRobot.driveBase.gyro.getAngle() / 22.5);
                 
                 
                 if(result > output && result > 0) {
