@@ -476,6 +476,8 @@ public class MechaPID implements LiveWindowSendable, MechaController {
   public synchronized void enable() {
         m_enabled = true;
 
+        MechaRobot.driveBase.resetGyro();
+        
         if (table != null) {
             table.putBoolean("enabled", true);
         }
