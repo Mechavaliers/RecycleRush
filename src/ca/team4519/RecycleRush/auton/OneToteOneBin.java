@@ -1,15 +1,18 @@
 package ca.team4519.RecycleRush.auton;
 
+import ca.team4519.RecycleRush.MechaRobot;
+import ca.team4519.lib.MechaCounter;
+import ca.team4519.lib.pid.MechaPID;
+
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
 public class OneToteOneBin extends Command {
 
+	public float rightRatio = 13757/120;
+	public float leftRatio = 13140/120;
+	
     public OneToteOneBin() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    	super("OneToteOneBin");
     }
 
     // Called just before this Command runs the first time
@@ -18,6 +21,7 @@ public class OneToteOneBin extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    
     }
 
     // Make this return true when this Command no longer needs to run execute()
