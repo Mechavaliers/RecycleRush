@@ -78,7 +78,6 @@ public class Elevator extends Subsystem implements Loopable{
 	 }
 	 
 	 public void clawToggle1(boolean button, Solenoid claw) {
-		 
 		if(!button){
 			toggleTop=true;
 		}else if(toggleTop){
@@ -97,6 +96,7 @@ public class Elevator extends Subsystem implements Loopable{
 	 }
 	 
 	public void update() {
-		SmartDashboard.putBoolean("UpperClaw is brabbing?", upperClaw.get());
+		SmartDashboard.putBoolean("UpperClaw Status", upperClaw.get());
+		SmartDashboard.putBoolean("LowerClaw Status",  lowerClaw.get());
 	}
 }
