@@ -9,8 +9,8 @@ public class Constants extends ConstantsBase {
 	public static final Constant rightDriveA = new Constant("rightDriveA", 2);
 	public static final Constant rightDriveB = new Constant("rightDriveB", 3);
 	public static final Constant strafeA = new Constant("strafeA", 4);
-	public static final Constant lowerClawSpool = new Constant("lowerClawSpool", 5);
-	public static final Constant upperClawSpool = new Constant("upperClawSpool", 6);
+	public static final Constant lowerClawSpool = new Constant("lowerClawSpool", 6);
+	public static final Constant upperClawSpool = new Constant("upperClawSpool", 5);
 	
 	public static final Constant lowerClaw = new Constant("lowerClaw", 0);
 	public static final Constant upperClaw = new Constant("upperClaw", 1);

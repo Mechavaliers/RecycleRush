@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tResourceType;
 import edu.wpi.first.wpilibj.communication.UsageReporting;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -218,7 +219,9 @@ public class MechaGyro extends SensorBase implements PIDSource, LiveWindowSendab
 	 *            An enum to select the parameter.
 	 */
 
-	
+	public double pidGet() {
+			return getAngle();
+		}
 
 	/**
 	 * Get the output of the gyro for use with PIDControllers.
@@ -275,9 +278,4 @@ public class MechaGyro extends SensorBase implements PIDSource, LiveWindowSendab
 	public void stopLiveWindowMode() {
 	}
 
-	@Override
-	public double pidGet() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

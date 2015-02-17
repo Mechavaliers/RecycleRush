@@ -79,6 +79,10 @@ public class DriveBase extends Subsystem implements Loopable {
 	    	
 	    	if(handBrake){
 	    		 multiplier = 0;
+	    		 strafeOut = 0;
+	    		 turningOut = 0;
+	    		 drivingOut = 0;
+	    		 
 	    		}else{
 	    			multiplier = 1;
 	    		}
@@ -265,7 +269,7 @@ public class DriveBase extends Subsystem implements Loopable {
 		    SmartDashboard.putNumber("Left Drive Distance", getLeftEncoderDistance());
 		    SmartDashboard.putNumber("Right Drive Distance", getRightEncoderDistance());
 		    SmartDashboard.putNumber("Both Encoders, Average Distance", getAverageDistance());
-		    SmartDashboard.putNumber("gyro", smartAngle());
+		    SmartDashboard.putNumber("gyro", getGyroAngle());
 		    super.update(); 
 	   	}
 }

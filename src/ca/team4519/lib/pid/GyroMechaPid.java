@@ -21,14 +21,14 @@ import edu.wpi.first.wpilibj.util.BoundaryException;
  */
 public class GyroMechaPid implements LiveWindowSendable, MechaController {
 
-    public static final double kDefaultPeriod = .05;
+    public static final double kDefaultPeriod = .025;
     private static int instances = 0;
     private double m_P;     // factor for "proportional" control
     private double m_I;     // factor for "integral" control
     private double m_D;     // factor for "derivative" control
     private double m_F;                 // factor for feedforward term
-    private double m_maximumOutput = 0.75; // |maximum output|
-    private double m_minimumOutput = -0.75;  // |minimum output|
+    private double m_maximumOutput = 0.6; // |maximum output|
+    private double m_minimumOutput = -0.6;  // |minimum output|
     private double m_maximumInput = 0.0;    // maximum input - limit setpoint to this
     private double m_minimumInput = 0.0;    // minimum input - limit setpoint to this
     private boolean m_continuous = false; // do the endpoints wrap around? eg. Absolute encoder
@@ -475,6 +475,7 @@ public class GyroMechaPid implements LiveWindowSendable, MechaController {
     @Override
   public synchronized void enable() {
         m_enabled = true;
+        
        
         if (table != null) {
             table.putBoolean("enabled", true);

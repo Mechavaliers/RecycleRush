@@ -11,11 +11,11 @@ public class MechaRobot {
 	
 	public static MultiLooper subsystemUpdater100Hz = new MultiLooper(1.0 / 100.0);
 
-		//public static void initRobot() {
-	    /// Add all subsystems to a 100Hz Looper		
-		//	subsystemUpdater100Hz.addLoopable(driveBase);
-		//	subsystemUpdater100Hz.addLoopable(elevator);
-		//}
+		public static void initRobot() {
+	    // Add all subsystems to a 100Hz Looper		
+		subsystemUpdater100Hz.addLoopable(driveBase);
+		subsystemUpdater100Hz.addLoopable(elevator);
+		}
 
 	public static void update() {
 		driveBase.update();

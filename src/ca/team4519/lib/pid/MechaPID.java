@@ -21,7 +21,7 @@ import ca.team4519.RecycleRush.MechaRobot;
  */
 public class MechaPID implements LiveWindowSendable, MechaController {
 
-    public static final double kDefaultPeriod = .05;
+    public static final double kDefaultPeriod = .025;
     private static int instances = 0;
     private double m_P;     // factor for "proportional" control
     private double m_I;     // factor for "integral" control
@@ -277,7 +277,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
                 }
                 pidOutput = m_pidOutput;
                 pidOutput2 = m_pidOutput2;
-                result = m_result - (MechaRobot.driveBase.gyro.getAngle() / 22.5);
+                result = m_result - (MechaRobot.driveBase.gyro.getAngle() / 37.5);
                 
                 
                 if(result > output && result > 0) {
@@ -476,7 +476,7 @@ public class MechaPID implements LiveWindowSendable, MechaController {
   public synchronized void enable() {
         m_enabled = true;
 
-        MechaRobot.driveBase.resetGyro();
+        MechaRobot.driveBase.resetAll();
         
         if (table != null) {
             table.putBoolean("enabled", true);

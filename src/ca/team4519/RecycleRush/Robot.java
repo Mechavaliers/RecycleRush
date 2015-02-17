@@ -13,8 +13,11 @@ public class Robot extends MechaIterativeRobot {
 	
 	public void robotInit() {
 		
-		autonSelect.addDefault("driveDistance", new DriveDist());
-		autonSelect.addObject("swagaroooo", new OneToteOneBin());
+		MechaRobot.driveBase.gyro.initGyro();
+		
+		autonSelect.addDefault("Drive Distance", new DriveDist());
+		autonSelect.addObject("One Tote One Bin", new OneToteOneBin());
+		autonSelect.addObject("Three Tote One Bin", new ThreeToteOneBin());
 		SmartDashboard.putData("Autonomous Mode Selector", autonSelect);
     	
     	
@@ -23,7 +26,8 @@ public class Robot extends MechaIterativeRobot {
 	public void autonomousInit() {
 		autoMode = (Command) autonSelect.getSelected();
 		autoMode.start();
-		MechaRobot.driveBase.resetEncoders();
+		MechaRobot.driveBase.resetAll();
+		MechaRobot.elevator.lowerClaw.set(true);
 	}
 	
 	public void autonomousPeriodic() {
@@ -33,21 +37,24 @@ public class Robot extends MechaIterativeRobot {
 	}
     
 	public void teleopInit() {
+		MechaAuton.threeToteOneBin.cancel();
+		MechaAuton.oneToteOneBin.cancel();
 		MechaRobot.driveBase.resetEncoders();
+		MechaRobot.elevator.lowerClaw.set(true);
 	}
 	
     public void teleopPeriodic() {
     	MechaRobot.driveBase.shiftGears(true);	
     	
-    	MechaRobot.elevator.clawToggle1(MechaRobot.elevator.upperGrip(), MechaRobot.elevator.lowerClaw);	
-    	MechaRobot.elevator.clawToggle2(MechaRobot.elevator.lowerGrip(), MechaRobot.elevator.upperClaw);
+    	MechaRobot.elevator.clawToggle1(MechaRobot.elevator.upperGrip(), MechaRobot.elevator.upperClaw);	
+    	MechaRobot.elevator.clawToggle2(MechaRobot.elevator.lowerGrip(), MechaRobot.elevator.lowerClaw);
     	
-    	MechaRobot.elevator.elevatorMovement(MechaRobot.elevator.upperClawStick.getY(), -MechaRobot.elevator.lowerClawStick.getY());	
+    	MechaRobot.elevator.elevatorMovement(-MechaRobot.elevator.upperClawStick.getY(), MechaRobot.elevator.lowerClawStick.getY());	
     	MechaRobot.driveBase.setLeftRightStrafePower(MechaRobot.driveBase.forwardAxis(), MechaRobot.driveBase.turningAxis(),MechaRobot.driveBase.gamepad.getRawAxis(3), MechaRobot.driveBase.gamepad.getRawAxis(2), MechaRobot.driveBase.gamepad.getRawButton(6));
     }
    
     public void testPeriodic() {
-    
+    	MechaRobot.driveBase.gyro.initGyro();
     }
     
     public void allPeriodic() {
