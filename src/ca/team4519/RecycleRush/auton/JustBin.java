@@ -9,9 +9,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class OneToteOneBin extends Command {
-	
-	MechaCounter driveCounter = new MechaCounter("Drive Counter", 10);
+/**
+ *
+ */
+public class JustBin extends Command {
+
+MechaCounter driveCounter = new MechaCounter("Drive Counter", 10);
 	
 	public float rightRatio = 13757/120;
 	public float leftRatio = 13140/120;
@@ -21,8 +24,8 @@ public class OneToteOneBin extends Command {
 	MechaPID right = new MechaPID(-0.00020, -0.000003, -0.0000001, MechaRobot.driveBase.rightEncoder, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.rightDriveB);
 	GyroMechaPid turn = new GyroMechaPid(1/45.0, 0.1, 0.1, MechaRobot.driveBase.gyro, MechaRobot.driveBase.rightDriveA, MechaRobot.driveBase.leftDriveA);
 	
-    public OneToteOneBin() {
-    	super("OneToteOneBin");
+    public JustBin() {
+    	super("JustBin");
     }
 
     // Called just before this Command runs the first time
@@ -46,51 +49,37 @@ public class OneToteOneBin extends Command {
     	if(driveCounter.Value() == 0){
             MechaRobot.elevator.upperClaw.set(!MechaRobot.elevator.upperClaw.get());//close
             MechaRobot.elevator.upperClawSpool.set(1.0);//up
+            MechaRobot.elevator.lowerClawSpool.set(-1.0);
             Timer.delay(1.8);
             MechaRobot.elevator.upperClawSpool.set(0.0);//stop
+            MechaRobot.elevator.lowerClawSpool.set(0.0);
             driveCounter.increment();
-    }else if(driveCounter.Value() == 1){
-            left.setSetpoint(22*leftRatio); //18 inches?
-            left.enable();
-            right.setSetpoint(22*rightRatio);
-            right.enable();
             driveCounter.increment();
-    }else if(driveCounter.Value() == 2 &&(left.onTarget()||right.onTarget())){
-            left.disable();
-            right.disable();          
-            left.setAbsoluteTolerance(150);
-        	right.setAbsoluteTolerance(150);
-            MechaRobot.elevator.lowerClaw.set(!MechaRobot.elevator.lowerClaw.get());//close
-            Timer.delay(0.3);
-            MechaRobot.elevator.lowerClawSpool.set(-1.0);//up
-            Timer.delay(0.6);
-            MechaRobot.elevator.lowerClawSpool.set(0.0);//stop
-            driveCounter.increment();
-    }else if(driveCounter.Value() == 3){
-            turn.setSetpoint(-90);
+    }else if(driveCounter.Value() == 2){
+            turn.setSetpoint(-85);
             turn.enable();
             driveCounter.increment();
-    }else if(driveCounter.Value() == 4 && turn.onTarget()){
+    }else if(driveCounter.Value() == 3 && turn.onTarget()){
             turn.disable();
             Timer.delay(0.2);
-            left.setSetpoint(93*leftRatio);
-            right.setSetpoint(93*rightRatio);
+            left.setSetpoint(95*leftRatio);
+            right.setSetpoint(95*rightRatio);
             left.enable();
             right.enable();
             driveCounter.increment();
-    }else if(driveCounter.Value() == 5 &&(left.onTarget()||right.onTarget())){
-            left.disable();
-            right.disable();
-            Timer.delay(0.3);
-            turn.setSetpoint(90);
-            turn.setAbsoluteTolerance(15);
-            turn.enable();
-            driveCounter.increment();
-    }else if(driveCounter.Value() == 6 && turn.onTarget()){
+    }else if(driveCounter.Value() == 4 &&(left.onTarget()||right.onTarget())){
+        	left.disable();
+        	right.disable();
+        	Timer.delay(0.3);
+        	turn.setSetpoint(85);
+        	turn.setAbsoluteTolerance(15);
+        	turn.enable();
+        	driveCounter.increment();
+    }else if(driveCounter.Value() == 5 && turn.onTarget()){
     		turn.disable();
-    		driveCounter.increment();
-    		end = true;
-    }
+			driveCounter.increment();
+			end = true;
+	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -118,4 +107,5 @@ public class OneToteOneBin extends Command {
     	MechaRobot.driveBase.resetAll();
     	driveCounter.reset();
     }
+
 }

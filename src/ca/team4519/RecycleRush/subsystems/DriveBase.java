@@ -21,9 +21,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveBase extends Subsystem implements Loopable {
 	
-		double strafeOut = 0;
-		double turningOut = 0;
-	double drivingOut = 0;
+		double strafeOut = 0.0;
+		double turningOut = 0.0;
+	double drivingOut = 0.0;
 	  	public final double RIGHT_ENCOCDER_TO_DISTANCE_RATIO = (Math.PI*6)/2176 /*(Constants.wheelSize.getDouble() * Math.PI) / (13.0)*/;
 	  	public final double LEFT_ENCOCDER_TO_DISTANCE_RATIO = (Math.PI*6)/2176 /*(Constants.wheelSize.getDouble() * Math.PI) / (13.0)*/;
 	  
@@ -34,7 +34,8 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	public Talon rightDriveB = new Talon(Constants.rightDriveB.getInt());
 	  	public Talon strafeA = new Talon(Constants.strafeA.getInt());
 	  	public Joystick gamepad = new Joystick(0);
-	  
+	  	public boolean rumble = false;
+	  	public boolean antiRamp = false;
 	  	//Encoders
 	  	public Encoder leftEncoder = new Encoder(Constants.leftDriveEncoderCHAN_A.getInt(), Constants.leftDriveEncoderCHAN_B.getInt(), true);
 	  	public Encoder rightEncoder = new Encoder(Constants.rightDriveEncoderCHAN_A.getInt(), Constants.rightDriveEncoderCHAN_B.getInt(), false);
@@ -49,7 +50,7 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	
 	  	public RioAcceleromiter accelerometer = new RioAcceleromiter();
 	  	
-	    public void setLeftRightStrafePower(double tankLeft, double tankRight, double strafePositive, double strafeNegative, boolean handBrake) {
+	    public void setLeftRightStrafePower(double tankLeft, double tankRight, double strafePositive, double strafeNegative, boolean handBrake, boolean bruh) {
 	    	
 	    	int multiplier = 1;
 	    	
@@ -76,7 +77,23 @@ public class DriveBase extends Subsystem implements Loopable {
 	    	}else if(tankRight < drivingOut) {
 	    		drivingOut -= Constants.rampingConstant.getDouble();
 	    	}
-	    	
+	    	//SmartDashboard.putNumber("tankright out", drivingOut);
+	    	//SmartDashboard.putNumber("tankleft out", turningOut);
+	    	//SmartDashboard.putDouble("tankright out", drivingOut);
+	    	if(drivingOut<0.001&&drivingOut>-0.001){
+	    		drivingOut=0.0;
+	    	}else if(drivingOut>=0.99){
+	    		drivingOut=1.0;
+	    	}else if (drivingOut<=-0.99){
+	    		drivingOut=-1.0;
+	    	}
+	    	if(turningOut<0.001&&turningOut>-0.001){
+	    		turningOut=0.0;
+	    	}else if(turningOut>=0.99){
+	    		turningOut=1.0;
+	    	}else if (turningOut<=-0.99){
+	    		turningOut=-1.0;
+	    	}
 	    	if(handBrake){
 	    		 multiplier = 0;
 	    		 strafeOut = 0;
@@ -87,12 +104,34 @@ public class DriveBase extends Subsystem implements Loopable {
 	    			multiplier = 1;
 	    		}
 	    	
-	    	leftDriveA.set(-turningOut * multiplier);
-	    	leftDriveB.set(-turningOut * multiplier);
-	    	rightDriveA.set(drivingOut * multiplier);
-	    	rightDriveB.set(drivingOut * multiplier);
+	    	if(!bruh){
+				antiRamp=true;
+			}else if(antiRamp){
+				rumble= ! rumble;
+				antiRamp=false;
+			}
+	    	if(!rumble){
+				leftDriveA.set(-turningOut * multiplier);
+		    	leftDriveB.set(-turningOut * multiplier);
+		    	rightDriveA.set(drivingOut * multiplier);
+		    	rightDriveB.set(drivingOut * multiplier);
+		    	gamepad.setRumble(Joystick.RumbleType.kLeftRumble, 0.0f);
+		    	gamepad.setRumble(Joystick.RumbleType.kRightRumble, 0.0f);
+	    	}else{
+	    		turningOut = tankLeft*tankLeft*tankLeft;
+	    		drivingOut = tankRight*tankRight*tankRight;
+				leftDriveA.set(-turningOut * multiplier);
+		    	leftDriveB.set(-turningOut * multiplier);
+		    	rightDriveA.set(drivingOut * multiplier);
+		    	rightDriveB.set(drivingOut * multiplier);
+		    	gamepad.setRumble(Joystick.RumbleType.kLeftRumble, 0.5f);
+		    	gamepad.setRumble(Joystick.RumbleType.kRightRumble, 0.5f);
+	    	}
+	    	
+	    	
+	    	
 	 
-	    	strafeA.set(-strafeOut);
+	    	strafeA.set(-strafeAxis);
 	    	
 	    }	    
 	    
@@ -179,7 +218,7 @@ public class DriveBase extends Subsystem implements Loopable {
 		      return gyro.getRate();
 	   }  
 		  
-	   	public double nonContAngle(){
+	/*   	public double nonContAngle(){
 		   double angle = gyro.getAngle();
 		   if(gyro.getAngle() > 0){
 			   angle = gyro.getAngle()%360;
@@ -191,7 +230,7 @@ public class DriveBase extends Subsystem implements Loopable {
 		     return angle;
 		  }
 		  
-	   	public double smartAngle(){ // swag420blazeit
+	   	public double smartAngle(){ 
 		      double degRot = 0;
 		        if(3 >= nonContAngle() && nonContAngle() <= -3){
 		           degRot = 0;
@@ -201,7 +240,7 @@ public class DriveBase extends Subsystem implements Loopable {
 		            return degRot;
 		        }
 	   	}
-	   	
+	 */  	
 	   	public double XAcceleration() {
 	   		return accelerometer.getX();
 	   	}
@@ -270,6 +309,8 @@ public class DriveBase extends Subsystem implements Loopable {
 		    SmartDashboard.putNumber("Right Drive Distance", getRightEncoderDistance());
 		    SmartDashboard.putNumber("Both Encoders, Average Distance", getAverageDistance());
 		    SmartDashboard.putNumber("gyro", getGyroAngle());
+	    	SmartDashboard.putNumber("tankright out", drivingOut);
+	    	SmartDashboard.putNumber("tankleft out", turningOut);
 		    super.update(); 
 	   	}
 }
