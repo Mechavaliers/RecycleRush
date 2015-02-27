@@ -14,7 +14,7 @@ public class Constants extends ConstantsBase {
 	
 	public static final Constant lowerClaw = new Constant("lowerClaw", 0);
 	public static final Constant upperClaw = new Constant("upperClaw", 1);
-	public static final Constant chassisShift = new Constant("chassisShift", 2);
+	public static final Constant ventClaws = new Constant("ventClaws", 2);
 	
 	public static final Constant leftDriveEncoderCHAN_A = new Constant("leftDriveEncoderCHAN_A", 0);
 	public static final Constant leftDriveEncoderCHAN_B = new Constant("leftDriveEncoderCHAN_B", 1);

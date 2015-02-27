@@ -42,7 +42,7 @@ public class Robot extends MechaIterativeRobot {
 	}
 	
 	public void autonomousPeriodic() {
-		MechaRobot.driveBase.shiftGears(true);	
+		MechaRobot.elevator.ventClaws(true);	
 		
 		Scheduler.getInstance().run();
 	}
@@ -55,7 +55,7 @@ public class Robot extends MechaIterativeRobot {
 	}
 	
     public void teleopPeriodic() {
-    	MechaRobot.driveBase.shiftGears(true);	
+    	MechaRobot.elevator.ventClaws(true);	
     	
     	MechaRobot.elevator.clawToggle1(MechaRobot.elevator.upperGrip(), MechaRobot.elevator.upperClaw);	
     	MechaRobot.elevator.clawToggle2(MechaRobot.elevator.lowerGrip(), MechaRobot.elevator.lowerClaw);

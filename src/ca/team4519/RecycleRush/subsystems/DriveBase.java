@@ -44,13 +44,10 @@ public class DriveBase extends Subsystem implements Loopable {
 	  	
 	  	public MechaGyro gyro = new MechaGyro(Constants.gyro.getInt());
 	  	
-	  	//Solenoids 
-	  	private Solenoid shift = new Solenoid(Constants.chassisShift.getInt());
 
-	  	
 	  	public RioAcceleromiter accelerometer = new RioAcceleromiter();
 	  	
-	    public void setLeftRightStrafePower(double tankLeft, double tankRight, double strafePositive, double strafeNegative, boolean handBrake, boolean bruh) {
+	    public void setLeftRightStrafePower(double tankLeft, double tankRight, double strafePositive, double strafeNegative, boolean handBrake, boolean noRamp) {
 	    	
 	    	int multiplier = 1;
 	    	
@@ -104,7 +101,7 @@ public class DriveBase extends Subsystem implements Loopable {
 	    			multiplier = 1;
 	    		}
 	    	
-	    	if(!bruh){
+	    	if(!noRamp){
 				antiRamp=true;
 			}else if(antiRamp){
 				rumble= ! rumble;
@@ -150,15 +147,7 @@ public class DriveBase extends Subsystem implements Loopable {
 	    public boolean getShift() {
 	    	return gamepad.getRawButton(6);
 	    }
-	    
-	    public void shiftGears(boolean state) {
-	    	if(state){
-	    		shift.set(true);
-	    	}else{
-	    		shift.set(false);
-	    	}
-	    }
-	    
+	    	    
 	    public DriveBase() {
 	    	super("DriveBase");	
 	    }

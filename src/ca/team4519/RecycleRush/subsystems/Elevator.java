@@ -35,7 +35,7 @@ public class Elevator extends Subsystem implements Loopable{
 	public Encoder upperClawPosEncoder = new Encoder(Constants.upperClawPosEncoderCHAN_A.getInt(), Constants.upperClawPosEncoderCHAN_B.getInt(), true);
 	public Encoder lowerClawPosEncoder = new Encoder(Constants.lowerClawPosEncoderCHAN_A.getInt(), Constants.lowerClawPosEncoderCHAN_B.getInt(), false);
 	
-	
+	public Solenoid ventClaws = new Solenoid(Constants.ventClaws.getInt());
 	
 	public void elevatorMovement(double upperClaw, double lowerClaw) {
 		lowerClawSpool.set(lowerClaw * Math.abs(lowerClaw));
@@ -94,6 +94,10 @@ public class Elevator extends Subsystem implements Loopable{
 			toggleBot=false;
 		}
 	 }
+	
+	public void ventClaws(boolean wantVent) {
+		ventClaws.set(wantVent);
+	}
 	 
 	public void update() {
 		SmartDashboard.putBoolean("UpperClaw Status", upperClaw.get());
